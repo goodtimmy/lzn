@@ -1,0 +1,47 @@
+$(function(){
+	$("input,textarea").jqBootstrapValidation(
+	{
+		preventSubmit: true,
+		submitError:function($form,event,errors){
+		},
+		submitSuccess: function($form,event){
+			event.preventDefault();
+			// get values from FORM
+			var name=$("#contactForm input#name").val();
+			var email=$("#contactForm input#email").val();
+			var phone=$("#contactForm input#phone").val();
+			var message=$("#contactForm textarea#message").val();
+
+			$.ajax({
+				url:"contact_form.php",
+				type:"POST",
+				data:{
+					name:name,
+					email:email,
+					phone:phone,
+					message:message
+				},
+				cache:false,
+				success:function(){
+					$('#success_feedback').html("<div class='alert alert-success'>");
+					$('#success_feedback > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;").append("</button>");
+					$('#success_feedback > .alert-success').append("<strong>Thank you! Your message has been sent successfully!</strong>");
+					$('#success_feedback > .alert-success').append('</div>');
+					$('#contactForm').trigger("reset");
+				},
+				error:function(){
+					$('#success_feedback').html("<div class='alert alert-danger'>");
+					$('#success_feedback > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;").append("</button>");
+					$('#success_feedback > .alert-danger').append("<strong>Oops. Something went wrong. Try to contact us to <a href='mailto:balkiya@gumarova.com'>balkiya@gumarova.com</a>.</strong>");
+					$('#success_feedback > .alert-danger').append('</div>');
+					$('#contactForm').trigger("reset");
+				},})
+		},
+		filter:function(){
+			return $(this).is(":visible");
+		},
+	});
+	$("a[data-toggle=\"tab\"]").click(function(e){e.preventDefault();
+	$(this).tab("show");});
+});
+$('#name').focus(function(){$('#success_feedback').html('');});
