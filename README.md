@@ -1,0 +1,2 @@
+# lzn
+Lazne
